@@ -1,9 +1,11 @@
 # Universe Homelab
 
-| Hostname | Role           | OS      | Network(s)                    | Key Tech From List                  |
-|----------|----------------|---------|-------------------------------|------------------------------------|
-| `pf01`   | Main FW/Router | pfSense | `vmbr0` (WAN), `LAB-LAN`, DMZ | OPNsense, DHCP, basic firewall/VPN |
+![[homelab-layout.png]]
 
+
+| Hostname | Role | OS  | Network(s) | Key Tech From List |
+| -------- | ---- | --- | ---------- | ------------------ |
+| `pf01`   | Main FW/Router | pfSense | `vmbr0` (WAN), `LAB-LAN`, DMZ | OPNsense, DHCP, basic firewall/VPN |
 ---
 
 ## AD Lab
