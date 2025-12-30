@@ -1,4 +1,6 @@
 # Universe Homelab
+![Architecture Diagram](homelab-layout.png)
+
 
 ---
 
