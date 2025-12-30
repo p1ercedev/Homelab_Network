@@ -1,37 +1,59 @@
 # Universe Homelab
 
-| Hostname | Role           | OS      | Network(s)                    | Key Tech From List                  |
-|----------|----------------|---------|-------------------------------|------------------------------------|
-| `pf01`   | Main FW/Router | pfSense | `vmbr0` (WAN), `LAB-LAN`, DMZ | OPNsense, DHCP, basic firewall/VPN |
+---
+
+## Core Network and Edge Security
+
+| Hostname | Role           | OS      | Network(s)                    | OS & Services        |
+|----------|----------------|---------|-------------------------------|-------------------------------------|
+| `pf01`   | Main FW/Router | pfSense | `vmbr0` (WAN), `LAB-LAN`, DMZ | pfSense, firewall |
 
 ---
 
-## AD Lab
+## Active Directory Lab
+
+### Forests / Domains
+
 - `testlab.local`
   - `internal.testlab.local`
 - `corelab.local`
 
----
+### Domain Controllers
 
-# Active Directory Lab
+| Hostname                      | Role                            | OS             | Network(s) | Notes                        |
+|-------------------------------|----------------------------------|----------------|-----------|------------------------------|
+| `DC01.testlab.local`          | DC for `testlab.local`          | Windows Server | `LAB-LAN` | Primary testlab DC           |
+| `DC02.internal.testlab.local` | DC for `internal.testlab.local` | Windows Server | `LAB-LAN` | Internal subdomain DC        |
+| `DC03.corelab.local`          | DC for `corelab.local`          | Windows Server | `LAB-LAN` | Core services forest DC      |
 
-- **DC01.testlab.local**
-- **DC02.internal.testlab.local**
-- **DC03.corelab.local**
-
----
-
-# Linux Lab
-
-| Hostname | Role                      | OS         | Network(s) | Key Tech From List                                                              |
-|----------|---------------------------|------------|------------|--------------------------------------------------------------------------------|
-| `harbor` | Syslog + SIEM (Blue core) | Ubuntu LTS | `LAB-LAN`  | RSyslog/Syslog-ng, Wazuh or Elastic, Splunk (log rotation/compression?) Docker         |
-
----
-
-# Windows Clients
+### Windows Clients and Workstations
 
 | Hostname | Role           | OS         | Network(s) | Key Tech From List                  |
-|----------|----------------|------------|------------|------------------------------------|
-| `dev01`  | Windows client | Windows 10 | `LAB-LAN`  | Sysmon, Splunk Universal Forwarder |
-| `dev02`  | Windows client | Windows 11 | `LAB-LAN`  | Sysmon, Splunk Universal Forwarder |
+|----------|----------------|------------|------------|-------------------------------------|
+| `dev01`  | Windows client | Windows 10 | `LAB-LAN`  | Sysmon, Splunk Universal Forwarder  |
+| `dev02`  | Windows client | Windows 11 | `LAB-LAN`  | Sysmon, Splunk Universal Forwarder  |
+
+---
+
+## SOC / SIEM / Blue Team
+
+| Hostname | Role                      | OS         | Network(s) | Services                                                     |
+|----------|---------------------------|------------|------------|------------------------------------------------------------------------------------|
+| `mon01`  | Metrics + infra monitoring | Ubuntu LTS | 
+| `so01`   | NSM / Security Onion      | Oracle Linux | AD-Lab, Linux, Lab | Zeek, Suricata, Security Onion stack (alerts, PCAP, dashboards) |
+
+---
+
+## Monitoring and Observability
+
+| Hostname | Role                         | OS         | Network(s) | Services            |
+|----------|------------------------------|------------|------------|----------------------------------------|
+| `mon01`  | Metrics and infra monitoring | Ubuntu LTS | `LAB-LAN`  | Prometheus, Grafana, Netdata (SNMP/hosts) |
+
+---
+
+## Linux Infrastructure and Tooling
+
+| Hostname | Role                           | OS         | Network(s)          | Services                      |
+|----------|--------------------------------|------------|---------------------|--------------------------------------------------|
+| `linux1` | Docker / K3s / Git / Ansible   | Ubuntu LTS | `LAB-LAN`, `LAB-DMZ`| Docker, K3s, Portainer, GitLab, Nginx reverse proxy |
