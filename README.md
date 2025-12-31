@@ -2,18 +2,18 @@
 ![Architecture Diagram](homelab-layout.png)
 
 # All Machines
-| Hostname                      | Role                                         | OS             | Network(s)  | Services / Notes                                                |
-| ----------------------------- | -------------------------------------------- | -------------- | ----------- | --------------------------------------------------------------- |
-| `pf01`                        | Main Firewall / Router                       | pfSense        | All         | pfSense routing, firewall, NAT, VPN                             |
-| `DC01.testlab.local`          | Domain Controller (`testlab.local`)          | Windows Server | `LAB-LAN`   | Primary DC for testlab forest                                   |
-| `DC02.internal.testlab.local` | Domain Controller (`internal.testlab.local`) | Windows Server | `LAB-LAN`   | Subdomain DC                                                    |
-| `DC03.corelab.local`          | Domain Controller (`corelab.local`)          | Windows Server | `LAB-LAN`   | Core services forest DC                                         |
-| `dev01`                       | Windows Client                               | Windows 10     | `LAB-LAN`   | Sysmon, Splunk Universal Forwarder                              |
-| `dev02`                       | Windows Client                               | Windows 11     | `LAB-LAN`   | Sysmon, Splunk Universal Forwarder                              |
-| `mon01`                       | SIEM & SOC Platform                          | Ubuntu Server  | `MGMT-LAN`  | Splunk Enterprise, Wazuh                                        |
-| `so01`                        | Network Security Monitoring                  | Oracle Linux   | `MGMT-LAN`  | Security Onion stack (Zeek, Suricata, alerts, PCAP, dashboards) |
-| `mon02`                       | Infra & Metrics Monitoring                   | Ubuntu Serever | `MGMT-LAN`  | Prometheus, Grafana, Netdata, SNMP                              |
-| `linux01`                     | Automation / Containers / DevOps             | Ubuntu Server  | `LINUX-LAN` | Docker, K3s, Portainer, GitLab, Nginx reverse proxy             |
+| Hostname                      | Role                                         | Network(s)  | Services / Notes                                                |
+| ----------------------------- | -------------------------------------------- | ----------- | --------------------------------------------------------------- |
+| `pf01`                        | Main Firewall / Router                       | All         | pfSense routing, firewall, NAT, VPN                             |
+| `DC01.testlab.local`          | Domain Controller (`testlab.local`)          | `LAB-LAN`   | Primary DC for testlab forest                                   |
+| `DC02.internal.testlab.local` | Domain Controller (`internal.testlab.local`) | `LAB-LAN`   | Subdomain DC                                                    |
+| `DC03.corelab.local`          | Domain Controller (`corelab.local`)          | `LAB-LAN`   | Core services forest DC                                         |
+| `dev01`                       | Windows Client                               | `LAB-LAN`   | Sysmon, Splunk Universal Forwarder                              |
+| `dev02`                       | Windows Client                               | `LAB-LAN`   | Sysmon, Splunk Universal Forwarder                              |
+| `mon01`                       | SIEM & SOC Platform                          | `MGMT-LAN`  | Splunk Enterprise, Wazuh                                        |
+| `so01`                        | Network Security Monitoring                  | `MGMT-LAN`  | Security Onion stack (Zeek, Suricata, alerts, PCAP, dashboards) |
+| `mon02`                       | Infra & Metrics Monitoring                   | `MGMT-LAN`  | Prometheus, Grafana, Netdata, SNMP                              |
+| `linux01`                     | Automation / Containers / DevOps             | `LINUX-LAN` | Docker, K3s, Portainer, GitLab, Nginx reverse proxy             |
 # Ideas
 **Current Addons**
 - Active Directory
