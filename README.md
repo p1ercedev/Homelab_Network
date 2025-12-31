@@ -14,68 +14,120 @@
 | `so01`                        | Network Security Monitoring                  | `MGMT-LAN`  | Security Onion stack (Zeek, Suricata, alerts, PCAP, dashboards) |
 | `mon02`                       | Infra & Metrics Monitoring                   | `MGMT-LAN`  | Prometheus, Grafana, Netdata, SNMP                              |
 | `linux01`                     | Automation / Containers / DevOps             | `LINUX-LAN` | Docker, K3s, Portainer, GitLab, Nginx reverse proxy             |
+
+
 # Ideas
-**Current Addons**
-- Active Directory
-	- SCCM
 
-**New Services**
-- LimaCharlie EDR
-- Velociraptor server, Windows + Linux agents deployed
+# Core Network and Edge Security
 
----
+## pf01
+**Services**
+- pfSense routing
+- Firewall (stateful inspection, NAT)
 
-## Core Network and Edge Security
-| Hostname | Role           | OS      | Network(s) | Services               |
-| -------- | -------------- | ------- | ---------- | ---------------------- |
-| `pf01`   | Main FW/Router | pfSense | All        | pfSense routing and FW |
+**Notes**
+- Primary perimeter device for all lab networks
 
----
+# Active Directory Lab
 
-## Active Directory Lab
-
-### Forests / Domains
-
+## Forests / Domains
 - `testlab.local`
   - `internal.testlab.local`
 - `corelab.local`
 
-### Domain Controllers
+## Domain Controllers
 
-| Hostname                      | Role                            | OS             | Network(s) | Notes                        |
-|-------------------------------|----------------------------------|----------------|-----------|------------------------------|
-| `DC01.testlab.local`          | DC for `testlab.local`          | Windows Server | `LAB-LAN` | Primary testlab DC           |
-| `DC02.internal.testlab.local` | DC for `internal.testlab.local` | Windows Server | `LAB-LAN` | Internal subdomain DC        |
-| `DC03.corelab.local`          | DC for `corelab.local`          | Windows Server | `LAB-LAN` | Core services forest DC      |
+## DC01.testlab.local
+**Services**
+- AD DS
+- DNS
 
-### Windows Clients and Workstations
+**Notes**
+- Primary DC for `testlab.local`
 
-| Hostname | Role           | OS         | Network(s) | Key Tech From List                  |
-|----------|----------------|------------|------------|-------------------------------------|
-| `dev01`  | Windows client | Windows 10 | `LAB-LAN`  | Sysmon, Splunk Universal Forwarder  |
-| `dev02`  | Windows client | Windows 11 | `LAB-LAN`  | Sysmon, Splunk Universal Forwarder  |
+## DC02.internal.testlab.local
+**Services**
+- AD DS
+- DNS
 
----
+**Notes**
+- DC for `internal.testlab.local`
 
-## SOC / SIEM / Blue Team
+## DC03.corelab.local
+**Services**
+- AD DS
+- DNS
 
-| Hostname | Role                 | OS            | Network(s) | Services                                                        |
-| -------- | -------------------- | ------------- | ---------- | --------------------------------------------------------------- |
-| `mon01`  | SIEM & SOC Tools     | Ubuntu Server | MGMT-LAN   | Splunk Enterprise, Wazuh                                        |
-| `so01`   | NSM / Security Onion | Oracle Linux  | MGMT-LAN   | Zeek, Suricata, Security Onion stack (alerts, PCAP, dashboards) |
+**Notes**
+- DC for `corelab.local`
 
----
+## Windows Clients
 
-## Monitoring and Observability
+## dev01
+**Services**
+- Sysmon
+- Splunk Universal Forwarder
 
-| Hostname | Role                         | OS            | Network(s) | Services                                  |
-| -------- | ---------------------------- | ------------- | ---------- | ----------------------------------------- |
-| `mon02`  | Metrics and infra monitoring | Ubuntu LTS    | MGMT-LAN   | Prometheus, Grafana, Netdata (SNMP/hosts) |
+**Notes**
+- Endpoint telemetry generation
 
----
+## dev02
+**Services**
+- Sysmon
+- Splunk Universal Forwarder
 
-## Linux Infrastructure and Tooling
+**Notes**
+- Comparative endpoint testing
 
-| Hostname  | Role                              | OS         | Network(s) | Services                                            |
-| --------- | --------------------------------- | ---------- | ---------- | --------------------------------------------------- |
-| `linux01` | Docker / K3s / Git / Ansible host | Ubuntu LTS | LINUX-LAN  | Docker, K3s, Portainer, GitLab, Nginx reverse proxy |
+# SOC / SIEM / Blue Team
+
+## mon01
+**Services**
+- Splunk Enterprise
+- Wazuh
+
+**Notes**
+- Central SIEM and SOC tooling
+
+## so01
+**Services**
+- Security Onion
+- Zeek
+- Suricata
+
+**Notes**
+- Network security monitoring
+
+# Monitoring and Observability
+
+## mon02
+**Services**
+- Prometheus
+- Grafana
+- Netdata
+
+**Notes**
+- Infrastructure metrics and health
+
+# Linux Infrastructure and Tooling
+
+## linux01
+**Services**
+- Docker
+- K3s
+- Portainer
+- GitLab
+- Nginx reverse proxy
+
+**Notes**
+- Container hosting and automation
+
+## Current Add-ons
+- Active Directory
+  - SCCM
+
+### Planned Services
+- LimaCharlie EDR
+- Velociraptor (server + Windows/Linux agents)
+
+
