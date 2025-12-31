@@ -1,6 +1,27 @@
 # Universe Homelab
 ![Architecture Diagram](homelab-layout.png)
 
+# All Machines
+| Hostname  | Role                                       | OS              | Network(s)                | Key Tech From List                                  |
+| --------- | ------------------------------------------ | --------------- | ------------------------- | --------------------------------------------------- |
+| pf01      | Main FW/Router                             | pfSense         | vmbr0 (WAN), LAB-LAN, DMZ | OPNsense/pfSense, DHCP, basic firewall/VPN          |
+| DC01      | Domain Controller (testlab.local)          | Windows Server  | LAB-LAN                   | Active Directory, DNS                               |
+| DC02      | Domain Controller (internal.testlab.local) | Windows Server  | LAB-LAN                   | Active Directory, DNS                               |
+| DC03      | Domain Controller (corelab.local)          | Windows Server  | LAB-LAN                   | Active Directory, DNS                               |
+| dev01     | Windows client                             | Windows 10      | LAB-LAN                   | Sysmon, Splunk Universal Forwarder                  |
+| dev02     | Windows client                             | Windows 11      | LAB-LAN                   | Sysmon, Splunk Universal Forwarder                  |
+| **mon01** | Metrics + infra monitoring                 | Ubuntu LTS      | LAB-LAN                   | Prometheus, Grafana, Netdata                        |
+| linux01   | Docker / K3s / Git / Ansible host          | Ubuntu LTS      | LAB-LAN, LAB-DMZ          | Docker, K3s, Portainer, GitLab, Nginx reverse proxy |
+| so01      | Security Onion (NSM stack)                 | Ubuntu (SO ISO) | SPAN from pf01 + LAB-LAN  | Zeek, Suricata, Security Onion 2                    |
+
+# Ideas
+**Current Addons**
+- Active Directory
+	- SCCM
+
+**New Services**
+- LimaCharlie EDR
+- Velociraptor server, Windows + Linux agents deployed
 
 ---
 
