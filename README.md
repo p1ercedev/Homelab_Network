@@ -2,18 +2,18 @@
 ![Architecture Diagram](homelab-layout.png)
 
 # All Machines
-| Hostname                      | Category         | Role                                         | OS             | Network(s)  | Services / Notes                                                |
-| ----------------------------- | ---------------- | -------------------------------------------- | -------------- | ----------- | --------------------------------------------------------------- |
-| `pf01`                        | Core Network     | Main Firewall / Router                       | pfSense        | All         | pfSense routing, firewall, NAT, VPN                             |
-| `DC01.testlab.local`          | Active Directory | Domain Controller (`testlab.local`)          | Windows Server | `LAB-LAN`   | Primary DC for testlab forest                                   |
-| `DC02.internal.testlab.local` | Active Directory | Domain Controller (`internal.testlab.local`) | Windows Server | `LAB-LAN`   | Subdomain DC                                                    |
-| `DC03.corelab.local`          | Active Directory | Domain Controller (`corelab.local`)          | Windows Server | `LAB-LAN`   | Core services forest DC                                         |
-| `dev01`                       | Windows Endpoint | Windows Client                               | Windows 10     | `LAB-LAN`   | Sysmon, Splunk Universal Forwarder                              |
-| `dev02`                       | Windows Endpoint | Windows Client                               | Windows 11     | `LAB-LAN`   | Sysmon, Splunk Universal Forwarder                              |
-| `mon01`                       | SOC / SIEM       | SIEM & SOC Platform                          | Ubuntu Server  | `MGMT-LAN`  | Splunk Enterprise, Wazuh                                        |
-| `so01`                        | SOC / NSM        | Network Security Monitoring                  | Oracle Linux   | `MGMT-LAN`  | Security Onion stack (Zeek, Suricata, alerts, PCAP, dashboards) |
-| `mon02`                       | Monitoring       | Infra & Metrics Monitoring                   | Ubuntu Serever | `MGMT-LAN`  | Prometheus, Grafana, Netdata, SNMP                              |
-| `linux01`                     | Linux Infra      | Automation / Containers / DevOps             | Ubuntu Server  | `LINUX-LAN` | Docker, K3s, Portainer, GitLab, Nginx reverse proxy             |
+| Hostname                      | Role                                         | OS             | Network(s)  | Services / Notes                                                |
+| ----------------------------- | -------------------------------------------- | -------------- | ----------- | --------------------------------------------------------------- |
+| `pf01`                        | Main Firewall / Router                       | pfSense        | All         | pfSense routing, firewall, NAT, VPN                             |
+| `DC01.testlab.local`          | Domain Controller (`testlab.local`)          | Windows Server | `LAB-LAN`   | Primary DC for testlab forest                                   |
+| `DC02.internal.testlab.local` | Domain Controller (`internal.testlab.local`) | Windows Server | `LAB-LAN`   | Subdomain DC                                                    |
+| `DC03.corelab.local`          | Domain Controller (`corelab.local`)          | Windows Server | `LAB-LAN`   | Core services forest DC                                         |
+| `dev01`                       | Windows Client                               | Windows 10     | `LAB-LAN`   | Sysmon, Splunk Universal Forwarder                              |
+| `dev02`                       | Windows Client                               | Windows 11     | `LAB-LAN`   | Sysmon, Splunk Universal Forwarder                              |
+| `mon01`                       | SIEM & SOC Platform                          | Ubuntu Server  | `MGMT-LAN`  | Splunk Enterprise, Wazuh                                        |
+| `so01`                        | Network Security Monitoring                  | Oracle Linux   | `MGMT-LAN`  | Security Onion stack (Zeek, Suricata, alerts, PCAP, dashboards) |
+| `mon02`                       | Infra & Metrics Monitoring                   | Ubuntu Serever | `MGMT-LAN`  | Prometheus, Grafana, Netdata, SNMP                              |
+| `linux01`                     | Automation / Containers / DevOps             | Ubuntu Server  | `LINUX-LAN` | Docker, K3s, Portainer, GitLab, Nginx reverse proxy             |
 # Ideas
 **Current Addons**
 - Active Directory
