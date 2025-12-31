@@ -16,11 +16,10 @@
 | `linux01`                     | Automation / Containers / DevOps             | `LINUX-LAN` | Docker, K3s, Portainer, GitLab, Nginx reverse proxy             |
 
 
-# Ideas
-
 # Core Network and Edge Security
 
 ## pf01
+
 **Services**
 - pfSense routing
 - Firewall (stateful inspection, NAT)
@@ -37,7 +36,7 @@
 
 ## Domain Controllers
 
-## DC01.testlab.local
+### DC01.testlab.local
 **Services**
 - AD DS
 - DNS
@@ -45,7 +44,7 @@
 **Notes**
 - Primary DC for `testlab.local`
 
-## DC02.internal.testlab.local
+### DC02.internal.testlab.local
 **Services**
 - AD DS
 - DNS
@@ -53,7 +52,7 @@
 **Notes**
 - DC for `internal.testlab.local`
 
-## DC03.corelab.local
+### DC03.corelab.local
 **Services**
 - AD DS
 - DNS
@@ -63,7 +62,7 @@
 
 ## Windows Clients
 
-## dev01
+### dev01
 **Services**
 - Sysmon
 - Splunk Universal Forwarder
@@ -71,7 +70,7 @@
 **Notes**
 - Endpoint telemetry generation
 
-## dev02
+### dev02
 **Services**
 - Sysmon
 - Splunk Universal Forwarder
@@ -81,7 +80,7 @@
 
 # SOC / SIEM / Blue Team
 
-## mon01
+### mon01
 **Services**
 - Splunk Enterprise
 - Wazuh
@@ -89,7 +88,7 @@
 **Notes**
 - Central SIEM and SOC tooling
 
-## so01
+### so01
 **Services**
 - Security Onion
 - Zeek
@@ -100,7 +99,7 @@
 
 # Monitoring and Observability
 
-## mon02
+### mon02
 **Services**
 - Prometheus
 - Grafana
@@ -111,7 +110,7 @@
 
 # Linux Infrastructure and Tooling
 
-## linux01
+### linux01
 **Services**
 - Docker
 - K3s
