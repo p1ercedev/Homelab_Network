@@ -1,0 +1,7 @@
+route:
+  receiver: 'admin'
+
+receivers:
+- name: 'admin'
+  webhook_configs:
+  - url: 'http://sms:9090/send'

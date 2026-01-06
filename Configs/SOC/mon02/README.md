@@ -1,4 +1,8 @@
+**Custom Docker Compose**
+For addtional insights about grafana-setup view the [Grafana-Stack](https://github.com/HudsonPWesel/Homelab_Network/tree/master/Services/Grafana-Stack) 
+Note this is just a testlab, don't actually expose your passwords.
 
+```docker
 services:
   grafana:
     image: grafana/grafana-enterprise
@@ -34,7 +38,6 @@ services:
     volumes:
       - prometheus_data:/prometheus
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
-      - ./prometheus_rules.yml:/etc/prometheus/rules.yml
     ports:
       - 9090:9090
     restart: unless-stopped
@@ -47,16 +50,7 @@ services:
       - "/:/host:ro,rslave"
     pid: host
     restart: unless-stopped
-  alertmanager:
-    container_name: alertmanager
-    image: prom/alertmanager:v0.28.0
-    command:
-      - "--config.file=config.yml" # Set custom params for default alertmanager command entry point
-    volumes:
-      - ./alertmanager.yml:/alertmanager/config.yml
-    ports:
-      - 9093:9093
-    restart: unless-stopped
+
 secrets:
   influxdb2-admin-username:
     file: ./.env.influxdb2-admin-username
@@ -69,3 +63,8 @@ volumes:
   influxdb2-data: {} 
   influxdb2-config: {}
   prometheus_data: {}
+```
+
+**Average Node boot time in seconds (Test Query)**
+
+![alt text](image.png)
