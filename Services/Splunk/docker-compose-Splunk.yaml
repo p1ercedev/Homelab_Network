@@ -1,0 +1,17 @@
+volumes:
+  splunkstorage:
+  splunketc:
+
+services:
+  splunk:
+    container_name: splunk-10.2
+    image: splunk/splunk:latest
+    env_file:
+      - ./splunk.env
+    ports:
+      - 8000:8000
+      - 9997:9997
+    volumes:
+      - splunkstorage:/opt/splunk/var
+      - splunketc:/opt/splunk/etc
+    restart: unless-stopped

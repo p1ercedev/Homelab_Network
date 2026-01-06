@@ -1,0 +1,29 @@
+# Config for winlogbeat on Windows7
+# winlogbeat.exe -e
+
+# For SYSMON
+# EXPORT : wevtutil epl Microsoft-Windows-Sysmon/Operational C:\evtx\Sysmon_FIXED.evtx
+# CHANGE PERMS: takeown /F C:\evtx\Sysmon.evtx
+# CHANGE PERMS: icacls C:\evtx\Sysmon.evtx /grant Administrators:F
+# CHANGE PERMS: icacls C:\evtx\Sysmon.evtx /grant SYSTEM:F
+# DEL .\data\winlogbeat.yaml
+# winlogbeat -e
+
+winlogbeat.event_logs:
+  # - name: C:\evtx\Applications.evtx  # Live -name: Application
+  #   no_more_events: stop
+
+  # - name: C:\evtx\Security.evtx # Live   - name: Security
+  #   no_more_events: stop
+
+  # - name: C:\evtx\System.evtx # Live   - name: System
+  #   no_more_events: stop
+
+  # To ingest these bring it down then up WITHOUT -d
+  winlogbeat.event_logs:
+    - name: C:\evtx\Sysmon_FIXED.evtx # Live  - name: Microsoft-Windows-Sysmon/Operational
+      provider: Microsoft-Windows-Sysmon
+      no_more_events: stop
+
+output.logstash:
+  hosts: ["192.168.1.50:5044"]

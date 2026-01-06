@@ -1,0 +1,39 @@
+services:
+  # -----------------------
+  # Base Templates
+  # -----------------------
+  kali-base: &kali-template
+    image: "p1erce/kali:latest"
+    stdin_open: true
+    tty: true
+    privileged: true
+    networks:
+      metasploitable-network:
+
+  # -----------------------
+  # Kali Boxes (10–19)
+  # -----------------------
+
+  kali0:
+    <<: *kali-template
+    container_name: "kali0"
+    networks:
+      metasploitable-network:
+        ipv4_address: 192.168.1.10
+
+# -----------------------
+# Networks
+# -----------------------
+networks:
+  metasploitable-network:
+    driver: ipvlan
+    driver_opts:
+      parent: ens19
+      ipvlan_mode: l2
+    ipam:
+      config:
+        - subnet: "192.168.1.0/24"
+          gateway: "192.168.1.1"
+
+  jumphost-bridge:
+    driver: bridge
