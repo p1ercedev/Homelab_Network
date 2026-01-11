@@ -1,7 +1,9 @@
 # Grafana Stack
+
 ## Setting up influxdb2 with telegraf
 
 ### Things I learned
+
 - Docker compose secrets
 - The order in which you prune mattters (obvious but I thought I was removing the volumes when I ran down, so my configs would be messed up)
 
@@ -90,6 +92,7 @@ DOCKER_INFLUXDB_INIT_ADMIN_TOKEN_FILE=/run/secrets/influxdb2-admin-token
 ```
 
 **telegraf.env**
+
 ```bash
 INFLUX_ORG=home
 INFLUX_TOKEN=MyInitialAdminToken0==
@@ -97,6 +100,7 @@ INFLUX_BUCKET = "main"
 ```
 
 **telegraf.conf**
+
 ```toml
 [agent]
 interval = "10s"
@@ -123,13 +127,14 @@ organization = "${INFLUX_ORG}"
 
 **New API token**
 
-![[Pasted image 20260111150641.png]]
+![alt text](image.png)
 
 **Setting new API token**
 
 It's important to note that we must update the `telegraf.env` the `.env.influxdb2-admin-token` (docker-compose secrets) and make sure that our telegraf.conf is configured to accept this. You could hardcode into telegraf.conf if you wanted but I like this separation.
-![[Pasted image 20260111150849.png]]
+![alt text](image-1.png)
 **docker**
+
 ```bash
 p1erce@mon01:~/Homelab_Network/Services/Grafana-Stack$ docker restart telegraf influxdb2 
 telegraf
@@ -138,5 +143,6 @@ influxdb2
 
 **Completion**
 When we return to our `main` bucket we should have everything right as rain.
-![[Pasted image 20260111151120.png]]
+![alt text](image-2.png)
+
 ## Settting up Grafana
