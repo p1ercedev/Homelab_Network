@@ -1,19 +1,38 @@
 
 services:
-  grafana:
-    image: grafana/grafana-enterprise
-    container_name: grafana
-    restart: unless-stopped
-    ports:
-      - '3000:3000'
-    volumes:
-      # - grafana-storage:/var/lib/grafana
-      - '$PWD/data:/var/lib/grafana'
-    user: '1000' # id -u 
-    env_file:
-      - ./grafana.env
+  # loki:
+  #   image: grafana/loki:3.0.0                       # Specifies the Loki Docker image and version.
+  #   container_name: loki                            # Names the container for easier management.
+  #   volumes:
+  #     - ./loki-config.yml:/mnt/config/loki-config.yaml # Mounts the Loki configuration file.
+  #     - ./data:/tmp
+  #   ports:
+  #     - "3100:3100"                                 # Maps port 3100 on the host to port 3100 in the container.
+  #   command: -config.file=/mnt/config/loki-config.yaml # Runs Loki with the specified configuration file.
+  # promtail:
+  #   image: grafana/promtail:3.0.0                   # Specifies the Promtail Docker image and version.
+  #   container_name: promtail                        # Names the container for easier management.
+  #   volumes:
+  #     - ./promtail-config.yml:/mnt/config/promtail-config.yaml # Mounts the Promtail configuration file.
+  #     - /var/log:/var/log                           # Mounts the host's log directory.
+  #   depends_on:
+  #     - loki                                       # Ensures Promtail starts after Loki.
+  #   command: -config.file=/mnt/config/promtail-config.yaml # Runs Promtail with the specified configuration file.
+  # grafana:
+  #   image: grafana/grafana-enterprise
+  #   container_name: grafana
+  #   restart: unless-stopped
+  #   ports:
+  #     - '3000:3000'
+  #   volumes:
+  #     # - grafana-storage:/var/lib/grafana
+  #     - '$PWD/data:/var/lib/grafana'
+  #   user: '1000' # id -u 
+  #   env_file:
+  #     - ./grafana.env
   influxdb2:
     image: influxdb:2
+    container_name: influxdb2
     ports:
       - 8086:8086
     env_file:
@@ -29,34 +48,50 @@ services:
       - type: volume
         source: influxdb2-config
         target: /etc/influxdb2
-  prometheus:
-    image: prom/prometheus:v3.5.0
-    volumes:
-      - prometheus_data:/prometheus
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
-      - ./prometheus_rules.yml:/etc/prometheus/rules.yml
-    ports:
-      - 9090:9090
+  # prometheus:
+  #   image: prom/prometheus:v3.5.0
+  #   volumes:
+  #     - prometheus_data:/prometheus
+  #     - ./prometheus.yml:/etc/prometheus/prometheus.yml
+  #     - ./prometheus_rules.yml:/etc/prometheus/rules.yml
+  #   ports:
+  #     - 9090:9090
+  #   restart: unless-stopped
+  telegraf:
+    image: telegraf:latest
+    container_name: telegraf
     restart: unless-stopped
-  node-exporter:
-    container_name: node-exporter
-    image: prom/node-exporter:v1.9.0
-    command:
-      - "--path.rootfs=/host"
+    user: "1000:988"
+    env_file:
+      - ./telegraf.env
     volumes:
-      - "/:/host:ro,rslave"
-    pid: host
-    restart: unless-stopped
-  alertmanager:
-    container_name: alertmanager
-    image: prom/alertmanager:v0.28.0
-    command:
-      - "--config.file=config.yml" # Set custom params for default alertmanager command entry point
-    volumes:
-      - ./alertmanager.yml:/alertmanager/config.yml
-    ports:
-      - 9093:9093
-    restart: unless-stopped
+      - '/:/hostfs:ro' # to monitor docker-vm
+      - './telegraf.conf:/etc/telegraf/telegraf.conf:ro'
+      - '/var/run/docker.sock:/var/run/docker.sock:ro'
+    depends_on:
+      - influxdb2
+
+  # node-exporter:
+  #   container_name: node-exporter
+  #   image: prom/node-exporter:v1.9.0
+  #   command:
+  #     - "--path.rootfs=/host"
+  #   volumes:
+  #     - "/:/host:ro,rslave"
+  #   pid: host
+  #   restart: unless-stopped
+  # alertmanager:
+  #   container_name: alertmanager
+  #   image: prom/alertmanager:v0.28.0
+  #   command:
+  #     - "--config.file=config.yml" # Set custom params for default alertmanager command entry point
+  #   volumes:
+  #     - ./alertmanager.yml:/alertmanager/config.yml
+  #   ports:
+  #     - 9093:9093
+  #   restart: unless-stopped
+
+
 secrets:
   influxdb2-admin-username:
     file: ./.env.influxdb2-admin-username
