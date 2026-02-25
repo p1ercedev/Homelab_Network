@@ -18,18 +18,18 @@ services:
   #   depends_on:
   #     - loki                                       # Ensures Promtail starts after Loki.
   #   command: -config.file=/mnt/config/promtail-config.yaml # Runs Promtail with the specified configuration file.
-  # grafana:
-  #   image: grafana/grafana-enterprise
-  #   container_name: grafana
-  #   restart: unless-stopped
-  #   ports:
-  #     - '3000:3000'
-  #   volumes:
-  #     # - grafana-storage:/var/lib/grafana
-  #     - '$PWD/data:/var/lib/grafana'
-  #   user: '1000' # id -u 
-  #   env_file:
-  #     - ./grafana.env
+  grafana:
+     image: grafana/grafana-enterprise
+     container_name: grafana
+     restart: unless-stopped
+     ports:
+       - '3000:3000'
+     volumes:
+       # - grafana-storage:/var/lib/grafana
+       - '$PWD/data:/var/lib/grafana'
+     user: '1000' # id -u 
+     env_file:
+       - ./grafana.env
   influxdb2:
     image: influxdb:2
     container_name: influxdb2
@@ -48,15 +48,15 @@ services:
       - type: volume
         source: influxdb2-config
         target: /etc/influxdb2
-  # prometheus:
-  #   image: prom/prometheus:v3.5.0
-  #   volumes:
-  #     - prometheus_data:/prometheus
-  #     - ./prometheus.yml:/etc/prometheus/prometheus.yml
-  #     - ./prometheus_rules.yml:/etc/prometheus/rules.yml
-  #   ports:
-  #     - 9090:9090
-  #   restart: unless-stopped
+  prometheus:
+     image: prom/prometheus:v3.5.0
+     volumes:
+       - prometheus_data:/prometheus
+       - ./prometheus.yml:/etc/prometheus/prometheus.yml
+       - ./prometheus_rules.yml:/etc/prometheus/rules.yml
+     ports:
+       - 9090:9090
+     restart: unless-stopped
   telegraf:
     image: telegraf:latest
     container_name: telegraf
