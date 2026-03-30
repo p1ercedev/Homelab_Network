@@ -47,6 +47,7 @@
 
 - AD DS
 - DNS
+- TODO AD CS
 
 **Notes**
 
@@ -105,6 +106,7 @@
 **Services**
 
 - Splunk Enterprise
+- Grafana
 - Wazuh
 
 **Notes**
@@ -123,42 +125,31 @@
 
 - Network security monitoring
 
-# Monitoring and Observability
+# Monitoring and Observability 192.168.100.0/28
 
 ### mon02
 
 **Services**
-
 - Prometheus
 - Grafana
 - Netdata
 
 **Notes**
-
 - Infrastructure metrics and health
 
-# Linux Infrastructure and Tooling
+# Linux Infrastructure and Tooling 192.168.10.0/24
 
-### linux01
-
-**Services**
-
+### infra01
+- DNS (Bind / Unbound)
+- Possibly PKI later
+### core01
 - Docker
 - K3s
 - Portainer
 - GitLab
-- Nginx reverse proxy
-
-**Notes**
-
-- Container hosting and automation
-
-## Current Add-ons
-
-- Active Directory
-  - SCCM
 
 ### Planned Services
 
+- SCCM
 - LimaCharlie EDR
 - Velociraptor (server + Windows/Linux agents)

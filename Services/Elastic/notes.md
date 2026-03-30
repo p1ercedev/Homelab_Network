@@ -1,9 +1,12 @@
 # Zeek
+```bash
 docker run -it --name zeek   -v "$(pwd)":/pcap   zeek/zeek:latest /bin/bash
 ## Windows7 Winbeat forwarder download
 
 wget <https://artifacts.elastic.co/downloads/beats/winlogbeat/winlogbeat-7.17.16-windows-x86_64.zip>
+```
 
+```json
 ## logstash.conf changes
 
 input{
@@ -17,3 +20,5 @@ output{
         index => "winlogbeat-%{+YYYY.MM.dd}
     }
 }
+
+```
