@@ -4,7 +4,7 @@ services:
     image: ghcr.io/wg-easy/wg-easy
 
     environment:
-      - WGUI_PASSWORD=$$2a$$12$$XjDHHtnLWwxvjfmazh7av.vCEuU606J8fjGlZhgZlj5/f5rWLc.jm
+      - PASSWORD_HASH=$$2a$$12$$XjDHHtnLWwxvjfmazh7av.vCEuU606J8fjGlZhgZlj5/f5rWLc.jm
       - WG_HOST=10.30.102.23
 
     volumes:
