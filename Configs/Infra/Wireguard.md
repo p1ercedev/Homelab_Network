@@ -1,5 +1,5 @@
+**wg-helper script (dashboard on port 10086)**
 
-wg-helper script
 ```bash
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/ct/wireguard.sh)"
 ```
