@@ -1,4 +1,7 @@
-I wanted to try running docker in an lxc. First issue with lxc was DHCP
+# LXC Networking
+
+I wanted to try running docker in an lxc. First issue with lxc was networking
+
 ```bash
 root@pxmx:~# cat  /etc/pve/lxc/107.conf
 lxc.apparmor.profile: unconfined
@@ -7,7 +10,8 @@ lxc.cap.drop:
 ```
 
 
-**Custom install.sh**
+**Custom install.sh for LXC instead of Kali**
+
 ```bash
 root@web01:~/websploit# cat install.sh
 #!/usr/bin/env bash
@@ -238,9 +242,9 @@ Have fun hacking! - Omar (Ωr) Santos
 "
 ```
 
+**Custom docker-compose for websploit**
 
-```bash
-root@web01:~/websploit# cat docker-compose.yml 
+```yaml
 services:
 
 # OWASP WebGoat Lab
@@ -249,18 +253,20 @@ services:
     image: santosomar/webgoat
     platform: linux/amd64
     restart: unless-stopped
+    ports:
+      - "8200:8080"
     networks:
-      websploit:
-        ipv4_address: 192.168.1.200
+      - websploit
 
 # OWASP Juice Shop Lab
   juice-shop:
     container_name: juice-shop
     image: bkimminich/juice-shop
     restart: unless-stopped
+    ports:
+      - "8201:3000"
     networks:
-      websploit:
-        ipv4_address: 192.168.1.201
+      - websploit
 
 # Damn Vulnerable Web Application Lab
   dvwa:
@@ -268,9 +274,10 @@ services:
     image: santosomar/dvwa
     platform: linux/amd64
     restart: unless-stopped
+    ports:
+      - "8202:80"
     networks:
-      websploit:
-        ipv4_address: 192.168.1.202
+      - websploit
 
 # Sci-Fi themed CTF challenge
   galactic-archives:
@@ -278,9 +285,10 @@ services:
     image: santosomar/galactic-archives
     platform: linux/amd64
     restart: unless-stopped
+    ports:
+      - "8203:80"
     networks:
-      websploit:
-        ipv4_address: 192.168.1.203
+      - websploit
 
 # Halo-themed CTF challenge
   gravemind:
@@ -288,9 +296,10 @@ services:
     image: santosomar/gravemind
     platform: linux/amd64
     restart: unless-stopped
+    ports:
+      - "8204:80"
     networks:
-      websploit:
-        ipv4_address: 192.168.1.204
+      - websploit
 
 # Star Wars themed CTF challenge
   y-wing:
@@ -298,99 +307,110 @@ services:
     image: santosomar/ywing:latest
     platform: linux/amd64
     restart: unless-stopped
+    ports:
+      - "8205:80"
     networks:
-      websploit:
-        ipv4_address: 192.168.1.205
+      - websploit
 
 # Multi-Vulnerability Gauntlet Lab
   hydra-nexus:
     container_name: hydra-nexus
     build: ./additional-labs/Multi-Vulnerability-Gauntlet
     restart: unless-stopped
+    ports:
+      - "8206:80"
     networks:
-      websploit:
-        ipv4_address: 192.168.1.206
+      - websploit
 
 # XSS Lab
   phantom-script:
     container_name: phantom-script
     build: ./additional-labs/XSS
     restart: unless-stopped
+    ports:
+      - "8207:80"
     networks:
-      websploit:
-        ipv4_address: 192.168.1.207
+      - websploit
 
 # SSRF Lab
   trojan-relay:
     container_name: trojan-relay
     build: ./additional-labs/SSRF
     restart: unless-stopped
+    ports:
+      - "8208:80"
     networks:
-      websploit:
-        ipv4_address: 192.168.1.208
+      - websploit
 
 # SQL Injection Lab
   sqli-breach:
     container_name: sqli-breach
     build: ./additional-labs/SQLi
     restart: unless-stopped
+    ports:
+      - "8209:80"
     networks:
-      websploit:
-        ipv4_address: 192.168.1.209
+      - websploit
 
 # Command Injection Lab
   shell-inject:
     container_name: shell-inject
     build: ./additional-labs/Command_Injection
     restart: unless-stopped
+    ports:
+      - "8210:80"
     networks:
-      websploit:
-        ipv4_address: 192.168.1.210
+      - websploit
 
 # Path Traversal Lab
   maze-walker:
     container_name: maze-walker
     build: ./additional-labs/Path_Traversal
     restart: unless-stopped
+    ports:
+      - "8211:80"
     networks:
-      websploit:
-        ipv4_address: 192.168.1.211
+      - websploit
 
 # XXE Lab
   entity-smuggler:
     container_name: entity-smuggler
     build: ./additional-labs/XXE
     restart: unless-stopped
+    ports:
+      - "8212:5014"
     networks:
-      websploit:
-        ipv4_address: 192.168.1.212
+      - websploit
 
 # JWT Vulnerability Lab
   token-tower:
     container_name: token-tower
     build: ./additional-labs/token-tower
     restart: unless-stopped
+    ports:
+      - "8213:80"
     networks:
-      websploit:
-        ipv4_address: 192.168.1.213
+      - websploit
 
 # Server-Side Template Injection Lab
   render-reign:
     container_name: render-reign
     build: ./additional-labs/render-reign
     restart: unless-stopped
+    ports:
+      - "8214:80"
     networks:
-      websploit:
-        ipv4_address: 192.168.1.214
+      - websploit
 
 # Insecure Deserialization Lab
   deserial-gate:
     container_name: deserial-gate
     build: ./additional-labs/deserial-gate
     restart: unless-stopped
+    ports:
+      - "8215:80"
     networks:
-      websploit:
-        ipv4_address: 192.168.1.215
+      - websploit
 
 # DEF CON 31 Challenge
   redis-rogue:
@@ -398,39 +418,34 @@ services:
     image: santosomar/dc31_01:latest
     platform: linux/amd64
     restart: unless-stopped
+    ports:
+      - "8216:80"
     networks:
-      websploit:
-        ipv4_address: 192.168.1.216
+      - websploit
 
 # GraphQL Lab
   graphql-galaxy:
     container_name: graphql-galaxy
     build: ./additional-labs/GraphQL
     restart: unless-stopped
+    ports:
+      - "8217:80"
     networks:
-      websploit:
-        ipv4_address: 192.168.1.217
+      - websploit
 
 # Prototype Pollution Lab
   proto-pollute:
     container_name: proto-pollute
     build: ./additional-labs/Prototype_Pollution
     restart: unless-stopped
+    ports:
+      - "8218:80"
     networks:
-      websploit:
-        ipv4_address: 192.168.1.218
+      - websploit
 
-# Network configuration - macvlan on LAN
-# IMPORTANT: Change "parent: eth0" to match your host's actual NIC
-# (check with: ip link show)
 networks:
   websploit:
-    driver: macvlan
-    driver_opts:
-      parent: eth0
-    ipam:
-      config:
-        - subnet: 192.168.1.0/24
-          gateway: 192.168.1.253
-          ip_range: 192.168.1.192/28
+    driver: bridge
 ```
+
+See zeek-suricata-snort 

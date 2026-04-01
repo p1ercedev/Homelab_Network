@@ -2,6 +2,8 @@
 
 ![Architecture Diagram](homelab-layout.png)
 
+**SOC in a nutshell (yeah it's AI)**
+![[Pasted image 20260330183721.png]]
 # All Machines
 
 | Hostname                      | Role                                         | Network(s)  | Services / Notes                                                |
