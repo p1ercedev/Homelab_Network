@@ -1,0 +1,1 @@
+![Architecture Diagram](SOC-layout-AI.png)
