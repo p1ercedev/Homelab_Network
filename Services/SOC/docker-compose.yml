@@ -1,0 +1,56 @@
+services:
+  zeek:
+    container_name: zeek
+    image: activecm/zeek
+    network_mode: host
+    restart: always
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /root/zeek/zeek-spool:/usr/local/zeek/spool/
+      - /root/zeek/zeek-logs:/usr/local/zeek/logs/
+      - /root/zeek/node.cfg:/usr/local/zeek/etc/node.cfg
+    cap_add:
+      - NET_RAW
+      - NET_ADMIN
+
+  suricata:
+    container_name: suricata
+    image: jasonish/suricata
+    network_mode: host
+    restart: always
+    volumes:
+      - /root/suricata/logs:/var/log/suricata
+      - /root/suricata/rules:/var/lib/suricata
+      - /root/suricata/etc:/etc/suricata
+    environment:
+      - ENABLE_CRON=yes
+      - SURICATA_OPTIONS=-i eth1 -vvv
+    cap_add:
+      - NET_RAW
+      - NET_ADMIN
+      - SYS_NICE
+  # filebeat:
+  #   container_name: filebeat
+  #   image: elastic/filebeat:7.10.2 # I have to use version 2
+  #   depends_on:
+  #     - zeek
+  #     - suricata
+  #   environment:
+  #     - setup.kibana.host=192.168.100.1:443 # This is wazuh so it's diff
+  #     - output.elasticsearch.hosts=192.168.100.1:9200
+  #   # entrypoint: ["./filebeat-entrypoint.sh"]
+  #   # secrets:
+  #   # - wazuh_pass
+  #   volumes:
+  #     - "/root/filebeat.docker.yml:/usr/share/filebeat/filebeat.yml:ro"
+  #     - "/var/lib/docker/containers:/var/lib/docker/containers:ro"
+  #     - "/var/run/docker.sock:/var/run/docker.sock:ro"
+  #     - "registry:/usr/share/filebeat/data:rw"
+  #     - /root/suricata/logs:/var/log/suricata
+  #     - /root/zeek/zeek-spool:/usr/local/zeek/spool/
+  #     - /root/zeek/zeek-logs:/usr/local/zeek/logs/
+volumes:
+  registry:
+# secrets:
+# wazuh_pass:
+# file: ./wazuh_pass.env
