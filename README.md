@@ -1,79 +1,155 @@
 # Universe Homelab
 
-A segmented, multi-forest Active Directory homelab built for blue team operations, SOC workflow development, and infrastructure monitoring. The environment simulates a realistic enterprise network across isolated VLANs — complete with endpoint telemetry, SIEM ingestion, network security monitoring, and container-based tooling.
-
 ![Architecture Diagram](homelab-layout.png)
 
----
+## Network Overview
 
-## Network Segments
+A multi-segment cyber range and homelab built for offensive security research, Active Directory attack simulation, blue team detection engineering, and infrastructure automation. Everything runs on-prem on Proxmox with isolated virtual bridges and a pfSense perimeter.
 
-| Segment | Purpose | Key Hosts |
-|---|---|---|
-| **All** | Perimeter routing & firewall | `pf01` |
-| **LAB-LAN** | Active Directory forests + endpoints | `DC01` · `DC02` · `DC03` · `dev01` · `dev02` |
-| **MGMT-LAN** | SIEM, SOC, and observability stack | `mon01` · `so01` · `mon02` |
-| **LINUX-LAN** | Containers, CI/CD, and automation | `linux01` |
-
----
-
-## Infrastructure at a Glance
-
-### Edge — `pf01`
-
-pfSense appliance handling stateful inspection, NAT, routing. Single point of ingress/egress for the entire lab.
-
-### Active Directory — LAB-LAN
-
-Three domain controllers span two forests with a parent/child trust:
-
-- **`testlab.local`** — primary forest (`DC01`)
-  - `internal.testlab.local` — child domain (`DC02`)
-- **`corelab.local`** — separate forest for core services (`DC03`)
-
-Two Windows workstations (`dev01`, `dev02`) generate endpoint telemetry via **Sysmon** and ship logs through the **Splunk Universal Forwarder**.
-
-### SOC & SIEM — MGMT-LAN
-
-| Host | Stack | Role |
-|---|---|---|
-| `mon01` | Splunk Enterprise · Wazuh | Central log aggregation, alerting, and case management |
-| `so01` | Security Onion · Zeek · Suricata | Full-packet capture, IDS/IPS alerts, and network visibility |
-
-### Monitoring — MGMT-LAN
-
-| Host | Stack | Role |
-|---|---|---|
-| `mon02` | Prometheus · Grafana · Netdata · | Infrastructure health metrics and dashboarding |
-
-### Linux Infra — LINUX-LAN
-
-| Host | Stack | Role |
-|---|---|---|
-| `ci-cd01` | · K3-master node · GitLab · Jenkins | Container orchestration, CI/CD pipelines |
+| Stat | Value |
+|------|-------|
+| Machines | 14 |
+| AD Forests | 3 |
+| Networks | 4 |
+| Services | 20+ |
 
 ---
 
+## All Machines
 
-## Roadmap
+| Hostname | Role | Network | IP | Services / Notes |
+|----------|------|---------|----|------------------|
+| `pf01` | Firewall / Router | ALL | `.253` / `.15` | pfSense — routing, stateful inspection, NAT, VPN |
+| `DC01.testlab.local` | Domain Controller | AD Lab (`192.168.1.0/24`) | `.10` | Primary DC for `testlab.local` — AD DS, DNS |
+| `DC02.internal.testlab.local` | Domain Controller | AD Lab (`192.168.1.0/24`) | `.20` | Subdomain DC for `internal.testlab.local` — AD DS, DNS |
+| `DC03.corelab.local` | Domain Controller | AD Lab (`192.168.1.0/24`) | `.30` | Core services forest DC for `corelab.local` — AD DS, DNS |
+| `dev01` | Windows Client | AD Lab (`192.168.1.0/24`) | `.1` | Sysmon, Splunk Universal Forwarder — endpoint telemetry |
+| `dev02` | Windows Client | AD Lab (`192.168.1.0/24`) | `.2` | Sysmon, Splunk Universal Forwarder — comparative testing |
+| `mon01` | Wazuh | SOC (`192.168.100.0/28`) | `.1` | Wazuh manager — host-based detection & response |
+| `mon02` | Splunk | SOC (`192.168.100.0/28`) | `.2` | Splunk Enterprise — centralized SIEM |
+| `mon03` | Grafana Stack | SOC (`192.168.100.0/28`) | `.3` | Prometheus, Grafana, Netdata — metrics & observability |
+| `nsm01` | Network Security Monitoring | SOC (`192.168.100.0/28`) | `.4` | Zeek & Suricata — NSM, PCAP, IDS alerts |
+| `tkt01` | Incident Response | SOC (`192.168.100.0/28`) | `.5` | The Hive — case management & IR ticketing |
+| `Web01` | Vulnerable Web App | AD Lab (via `vmbr2`) | `.240` | WebSploit — intentionally vulnerable web target |
+| `linux01` | Automation / Containers | Linux (`192.168.10.0/24`) | — | Docker, K3s, Portainer, GitLab, Nginx reverse proxy |
 
-- [ ] **LimaCharlie EDR** — cloud-native endpoint detection and response
-- [ ] **Velociraptor** — forensic triage and live response (server + Windows/Linux agents)
-- [ ] **SCCM** — integrated with the Active Directory environment for endpoint management
 ---
 
-## Repo Structure
+## Network Topology
 
-```
-.
-├── Configs/       # Configuration files for lab services
-├── Ideas/         # Design notes and future plans
-├── Services/      # Service-specific documentation
-└── README.md
-```
+Four isolated segments interconnected through a pfSense perimeter. All inter-segment traffic routes through `pf01` — no flat network.
+
+### Segments
+
+| Segment | Subnet | Bridge | Purpose |
+|---------|--------|--------|---------|
+| **WAN** | `10.30.100.0/22` | `vmbr0` | Uplink / external connectivity |
+| **SOC** | `192.168.100.0/28` | `vmbr1` | SIEM, NSM, observability, IR |
+| **Active Directory Lab** | `192.168.1.0/24` | `vmbr2` | Domain controllers, clients, attack targets |
+| **Linux** | `192.168.10.0/24` | `vmbr4` | Containers, automation, DevOps tooling |
+
+### Virtual Bridges & Routing
+
+- **vmbr0** — WAN uplink
+- **vmbr1** — SOC network, connects to `pf01` at `.15`
+- **vmbr2** — AD Lab + WebSploit, connects to `pf01` at `.253`
+- **vmbr4** — Linux infrastructure
+- **OVS-Mirror** — port mirror between SOC and AD Lab for passive network visibility (Zeek/Suricata tap)
 
 ---
 
-## License
+## Core Network and Edge Security
 
-This project is shared for educational purposes. Use at your own risk.
+### pf01
+
+**Services:** pfSense routing, stateful firewall (inspection, NAT), VPN termination
+
+**Notes:** Primary perimeter device for all lab networks. Bridges WAN, SOC, AD Lab, and Linux segments.
+
+---
+
+## Active Directory Lab
+
+### Forests / Domains
+
+- `testlab.local`
+  - `internal.testlab.local`
+- `corelab.local`
+
+### Domain Controllers
+
+#### DC01.testlab.local
+**Services:** AD DS, DNS
+**Notes:** Primary DC for `testlab.local`
+
+#### DC02.internal.testlab.local
+**Services:** AD DS, DNS
+**Notes:** DC for `internal.testlab.local`
+
+#### DC03.corelab.local
+**Services:** AD DS, DNS
+**Notes:** DC for `corelab.local`
+
+### Windows Clients
+
+#### dev01
+**Services:** Sysmon, Splunk Universal Forwarder
+**Notes:** Endpoint telemetry generation
+
+#### dev02
+**Services:** Sysmon, Splunk Universal Forwarder
+**Notes:** Comparative endpoint testing
+
+### Attack Targets
+
+#### Web01
+**Services:** WebSploit
+**Notes:** Intentionally vulnerable web application for offensive testing
+
+---
+
+## SOC / SIEM / Blue Team
+
+### mon01
+**Services:** Wazuh
+**Notes:** Host-based intrusion detection and response
+
+### mon02
+**Services:** Splunk Enterprise
+**Notes:** Centralized SIEM and log aggregation
+
+### nsm01
+**Services:** Zeek, Suricata
+**Notes:** Network security monitoring via OVS-Mirror tap
+
+### tkt01
+**Services:** The Hive
+**Notes:** Incident response case management and ticketing
+
+---
+
+## Monitoring and Observability
+
+### mon03
+**Services:** Prometheus, Grafana, Netdata
+**Notes:** Infrastructure metrics, dashboards, and real-time health monitoring
+
+---
+
+## Linux Infrastructure and Tooling
+
+### linux01
+**Services:** Docker, K3s, Portainer, GitLab, Nginx reverse proxy
+**Notes:** Container hosting, CI/CD, and automation
+
+---
+
+## Current Add-ons
+
+- Active Directory
+  - SCCM
+
+### Planned Services
+
+- LimaCharlie EDR
+- Velociraptor (server + Windows/Linux agents)
