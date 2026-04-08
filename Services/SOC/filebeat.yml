@@ -21,18 +21,15 @@ filebeat.inputs:
     - /root/zeek/zeek-spool/manager/http.log
     - /root/zeek/zeek-spool/manager/capture_loss.log
   scan_frequency: 5s
+  exclude_lines: ['^#']
   tags: ["zeek"]
   fields:
     event.module: zeek
   fields_under_root: true
 
-# filebeat.config.modules:
-#   path: ${path.config}/modules.d/*.yml
-#   reload.enabled: false          # modules disabled
-
 output.elasticsearch:
   hosts: ["https://192.168.100.1:9200"]
-  username: ${username} 
+  username: ${username}
   password: ${password}
   ssl.verification_mode: none
   indices:
@@ -42,18 +39,14 @@ output.elasticsearch:
   - index: "zeek"
     when.contains:
       tags: "zeek"
-  
 
 setup.ilm.enabled: false
 setup.template.name: "filebeat"
 setup.template.pattern: "filebeat-*"
-
-
 setup.template.json.enabled: true
 setup.template.json.path: "/etc/filebeat/wazuh-template.json"
 setup.template.json.name: "wazuh"
 setup.template.overwrite: true
-setup.ilm.enabled: false
 
 logging.level: info
 logging.to_files: true
