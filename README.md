@@ -1,6 +1,8 @@
 # Universe Homelab
 
-![Architecture Diagram](homelab-layout.png)
+
+<img width="1336" height="883" alt="homelab" src="https://github.com/user-attachments/assets/78cecaf3-727d-46bd-a408-3ccf74586c19" />
+
 
 ## Network Overview
 
