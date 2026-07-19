@@ -1,7 +1,8 @@
 # Universe Homelab
 
 
-<img width="1336" height="883" alt="homelab" src="https://github.com/user-attachments/assets/78cecaf3-727d-46bd-a408-3ccf74586c19" />
+<img width="1349" height="869" alt="homelab" src="https://github.com/user-attachments/assets/992630b3-c3d2-462f-968c-75f3294d40b5" />
+
 
 
 ## Network Overview
